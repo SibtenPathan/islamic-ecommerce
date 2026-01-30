@@ -159,7 +159,7 @@ export default function OrdersPage() {
                                                 )}
                                             </div>
                                             <span className="order-item-price">
-                                                US${(item.price * item.quantity).toFixed(2)}
+                                                ₹{(item.price * item.quantity).toFixed(2)}
                                             </span>
                                         </div>
                                     ))}
@@ -175,7 +175,7 @@ export default function OrdersPage() {
                                     </div>
                                     <div className="order-total">
                                         <span>Total:</span>
-                                        <span className="total-amount">US${order.total.toFixed(2)}</span>
+                                        <span className="total-amount">₹{order.total.toFixed(2)}</span>
                                     </div>
                                 </div>
                             </div>

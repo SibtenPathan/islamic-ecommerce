@@ -50,8 +50,8 @@ export default function ProductDetailPage() {
           <div className="product-info-section">
             <h1 className="product-title">{product.name}</h1>
             <div className="product-price-row">
-              <span className="current-price">US${product.price.toFixed(2)}</span>
-              {product.originalPrice && <span className="original-price">US${product.originalPrice.toFixed(2)}</span>}
+              <span className="current-price">₹{product.price.toFixed(2)}</span>
+              {product.originalPrice && <span className="original-price">₹{product.originalPrice.toFixed(2)}</span>}
             </div>
 
             {product.colors && product.colors.length > 0 && (
@@ -96,7 +96,7 @@ export default function ProductDetailPage() {
                   </div>
                   <div className="related-info">
                     <h4>{relatedProduct.name}</h4>
-                    <span className="related-price">US${relatedProduct.price.toFixed(2)}</span>
+                    <span className="related-price">₹{relatedProduct.price.toFixed(2)}</span>
                     <button className="related-btn">Select</button>
                   </div>
                 </Link>

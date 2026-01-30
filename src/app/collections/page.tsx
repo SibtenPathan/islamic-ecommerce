@@ -15,8 +15,8 @@ export default function CollectionsPage() {
                     <h1>Discount 30%</h1>
                     <p>Hijab pashmina</p>
                     <div className="hero-price">
-                        <span className="sale-price">Rp70,000</span>
-                        <span className="original-price">Rp100,000</span>
+                        <span className="sale-price">₹70,000</span>
+                        <span className="original-price">₹100,000</span>
                     </div>
                 </div>
             </section>

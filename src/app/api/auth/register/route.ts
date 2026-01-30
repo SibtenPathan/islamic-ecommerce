@@ -5,7 +5,7 @@ import User from '@/models/User';
 
 export async function POST(request: NextRequest) {
     try {
-        const { name, email, password } = await request.json();
+        const { name, email, password, phone, address } = await request.json();
 
         // Validate input
         if (!name || !email || !password) {
@@ -37,11 +37,13 @@ export async function POST(request: NextRequest) {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Create user
+        // Create user with optional phone and address
         const user = await User.create({
             name,
             email: email.toLowerCase(),
             password: hashedPassword,
+            ...(phone && { phone }),
+            ...(address && { address }),
         });
 
         return NextResponse.json(

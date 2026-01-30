@@ -3,11 +3,27 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '@/contexts/CartContext';
-import type { Product } from '@/data/products';
 import './ProductCard.css';
 
+// Flexible product type that works with both MongoDB and legacy products
+interface ProductCardProduct {
+  _id?: string;
+  id?: number;
+  name: string;
+  category: string;
+  price: number;
+  originalPrice?: number;
+  image: string;
+  colors?: string[];
+  sizes?: string[];
+  isNew?: boolean;
+  isNewArrival?: boolean;
+  isBestSeller?: boolean;
+  isTrending?: boolean;
+}
+
 interface ProductCardProps {
-  product: Product & { _id?: string };
+  product: ProductCardProduct;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
@@ -49,9 +65,9 @@ export default function ProductCard({ product }: ProductCardProps) {
         <span className="product-category">{product.category}</span>
         <h3 className="product-name">{product.name}</h3>
         <div className="product-price">
-          <span className="current-price">US${product.price.toFixed(2)}</span>
+          <span className="current-price">₹{product.price.toFixed(2)}</span>
           {product.originalPrice && (
-            <span className="original-price">US${product.originalPrice.toFixed(2)}</span>
+            <span className="original-price">₹{product.originalPrice.toFixed(2)}</span>
           )}
         </div>
         {product.colors && product.colors.length > 0 && (

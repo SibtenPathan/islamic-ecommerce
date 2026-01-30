@@ -1,21 +1,25 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useCart } from '@/contexts/CartContext';
+import { useToast } from '@/contexts/ToastContext';
 import './checkout.css';
 
 export default function CheckoutPage() {
     const router = useRouter();
     const { data: session, status } = useSession();
     const { items, total, refreshCart } = useCart();
+    const { showToast } = useToast();
     const [loading, setLoading] = useState(false);
+    const [loadingProfile, setLoadingProfile] = useState(true);
     const [error, setError] = useState('');
     const [orderPlaced, setOrderPlaced] = useState(false);
     const [orderId, setOrderId] = useState('');
+    const [hasExistingAddress, setHasExistingAddress] = useState(false);
 
     const [shippingAddress, setShippingAddress] = useState({
         fullName: '',
@@ -25,6 +29,50 @@ export default function CheckoutPage() {
         country: '',
         phone: '',
     });
+
+    // Fetch user profile to pre-fill address
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            if (status !== 'authenticated') {
+                setLoadingProfile(false);
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/user');
+                if (res.ok) {
+                    const data = await res.json();
+                    const user = data.user;
+
+                    // Pre-fill from user profile
+                    if (user.address || user.phone) {
+                        setHasExistingAddress(true);
+                        setShippingAddress((prev) => ({
+                            ...prev,
+                            fullName: prev.fullName || user.name || '',
+                            address: prev.address || user.address?.street || '',
+                            city: prev.city || user.address?.city || '',
+                            postalCode: prev.postalCode || user.address?.postalCode || '',
+                            country: prev.country || user.address?.country || '',
+                            phone: prev.phone || user.phone || '',
+                        }));
+                    } else {
+                        // At least pre-fill the name
+                        setShippingAddress((prev) => ({
+                            ...prev,
+                            fullName: prev.fullName || user.name || '',
+                        }));
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching user profile:', error);
+            } finally {
+                setLoadingProfile(false);
+            }
+        };
+
+        fetchUserProfile();
+    }, [status]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -47,14 +95,32 @@ export default function CheckoutPage() {
 
             if (!res.ok) {
                 setError(data.error || 'Failed to place order');
+                showToast(data.error || 'Failed to place order', 'error');
                 return;
             }
 
+            // Also save the address to user profile for future use
+            await fetch('/api/user', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    phone: shippingAddress.phone,
+                    address: {
+                        street: shippingAddress.address,
+                        city: shippingAddress.city,
+                        postalCode: shippingAddress.postalCode,
+                        country: shippingAddress.country,
+                    },
+                }),
+            });
+
             setOrderPlaced(true);
             setOrderId(data.order.id);
+            showToast('Order placed successfully!', 'success');
             refreshCart();
         } catch {
             setError('Something went wrong');
+            showToast('Something went wrong. Please try again.', 'error');
         } finally {
             setLoading(false);
         }
@@ -211,7 +277,7 @@ export default function CheckoutPage() {
                         </div>
 
                         <button type="submit" className="place-order-btn" disabled={loading}>
-                            {loading ? 'Placing Order...' : `Place Order - US$${total.toFixed(2)}`}
+                            {loading ? 'Placing Order...' : `Place Order - ₹${total.toFixed(2)}`}
                         </button>
                     </form>
 
@@ -231,7 +297,7 @@ export default function CheckoutPage() {
                                     </div>
                                     <div className="summary-item-info">
                                         <span className="item-name">{item.product.name}</span>
-                                        <span className="item-price">US${(item.product.price * item.quantity).toFixed(2)}</span>
+                                        <span className="item-price">₹{(item.product.price * item.quantity).toFixed(2)}</span>
                                     </div>
                                 </div>
                             ))}
@@ -239,7 +305,7 @@ export default function CheckoutPage() {
                         <div className="summary-totals">
                             <div className="summary-row">
                                 <span>Subtotal</span>
-                                <span>US${total.toFixed(2)}</span>
+                                <span>₹{total.toFixed(2)}</span>
                             </div>
                             <div className="summary-row">
                                 <span>Shipping</span>
@@ -247,7 +313,7 @@ export default function CheckoutPage() {
                             </div>
                             <div className="summary-row total">
                                 <span>Total</span>
-                                <span>US${total.toFixed(2)}</span>
+                                <span>₹{total.toFixed(2)}</span>
                             </div>
                         </div>
                     </div>

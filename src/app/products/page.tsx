@@ -1,18 +1,55 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import ProductCard from '@/components/products/ProductCard';
-import { products, colorOptions, sizeOptions, categories } from '@/data/products';
+import { colorOptions, sizeOptions, categories } from '@/data/products';
 import './products.css';
 
+interface Product {
+  _id: string;
+  name: string;
+  category: string;
+  price: number;
+  originalPrice?: number;
+  image: string;
+  colors?: string[];
+  sizes?: string[];
+  material?: string;
+  description?: string;
+  specifications?: string[];
+  isNewArrival?: boolean;
+  isBestSeller?: boolean;
+  isTrending?: boolean;
+}
+
 export default function ProductCatalogPage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 200]);
   const [sortBy, setSortBy] = useState('newest');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('/api/products');
+        const data = await response.json();
+        if (data.products) {
+          setProducts(data.products);
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const filteredProducts = products.filter((product) => {
     if (selectedCategory && product.category.toLowerCase() !== selectedCategory.toLowerCase()) {
@@ -146,9 +183,15 @@ export default function ProductCatalogPage() {
             </div>
 
             <div className="products-grid">
-              {filteredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
+              {loading ? (
+                <div className="loading-state">
+                  <p>Loading products...</p>
+                </div>
+              ) : (
+                filteredProducts.map((product) => (
+                  <ProductCard key={product._id} product={product} />
+                ))
+              )}
             </div>
 
             {filteredProducts.length === 0 && (

@@ -1,7 +1,10 @@
 import mongoose from 'mongoose';
-import Product from '../src/models/Product';
+import bcrypt from 'bcryptjs';
+import Product from '../src/models/Product.js';
+import User from '../src/models/User.js';
+import Category from '../src/models/Category.js';
 
-const MONGODB_URI = 'mongodb://localhost:27017/islamic-ecommerce';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/islamic-ecommerce';
 
 // Products data from the existing static file
 const products = [
@@ -118,15 +121,58 @@ const products = [
     },
 ];
 
+// Categories data
+const categories = [
+    { name: 'Hijab', slug: 'hijab', image: '/images/ProductCatlog/image 88-1.png', description: 'Beautiful hijab collection', isActive: true },
+    { name: 'Abaya', slug: 'abaya', image: '/images/ProductCatlog/image 83-6.png', description: 'Elegant abaya designs', isActive: true },
+    { name: 'Gamis', slug: 'gamis', image: '/images/ProductCatlog/image 82-7.png', description: 'Modest gamis dresses', isActive: true },
+    { name: 'Dress', slug: 'dress', image: '/images/ProductCatlog/image 81-8.png', description: 'Muslimah dresses', isActive: true },
+    { name: 'Outerwear', slug: 'outerwear', image: '/images/ProductCatlog/image 80-9.png', description: 'Outer garments', isActive: true },
+];
+
+// Admin user data
+const adminUser = {
+    name: 'Admin',
+    email: 'admin@musluman.com',
+    password: 'admin123',
+    role: 'admin',
+};
+
 async function seed() {
     try {
         console.log('🌱 Connecting to MongoDB...');
         await mongoose.connect(MONGODB_URI);
         console.log('✅ Connected to MongoDB');
 
-        // Clear existing products
-        console.log('🗑️  Clearing existing products...');
+        // Clear existing data
+        console.log('🗑️  Clearing existing data...');
         await Product.deleteMany({});
+        await Category.deleteMany({});
+
+        // Create admin user if not exists
+        console.log('👤 Creating admin user...');
+        const existingAdmin = await User.findOne({ email: adminUser.email });
+        if (!existingAdmin) {
+            const hashedPassword = await bcrypt.hash(adminUser.password, 12);
+            await User.create({
+                name: adminUser.name,
+                email: adminUser.email,
+                password: hashedPassword,
+                role: adminUser.role,
+            });
+            console.log('✅ Admin user created');
+            console.log(`   Email: ${adminUser.email}`);
+            console.log(`   Password: ${adminUser.password}`);
+        } else {
+            // Update role to admin if exists
+            await User.findByIdAndUpdate(existingAdmin._id, { role: 'admin' });
+            console.log('✅ Admin user already exists (role updated)');
+        }
+
+        // Insert categories
+        console.log('🏷️  Inserting categories...');
+        const insertedCategories = await Category.insertMany(categories);
+        console.log(`✅ Inserted ${insertedCategories.length} categories`);
 
         // Insert products
         console.log('📦 Inserting products...');
@@ -150,3 +196,4 @@ async function seed() {
 }
 
 seed();
+

@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useCallback, ReactNode, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+import { useToast } from './ToastContext';
 
 interface CartItem {
     product: {
@@ -43,6 +44,7 @@ interface CartProviderProps {
 
 export function CartProvider({ children }: CartProviderProps) {
     const { data: session, status } = useSession();
+    const { showToast } = useToast();
     const [items, setItems] = useState<CartItem[]>([]);
     const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(false);
@@ -82,7 +84,7 @@ export function CartProvider({ children }: CartProviderProps) {
         selectedSize?: string
     ) => {
         if (status !== 'authenticated') {
-            alert('Please login to add items to cart');
+            showToast('Please login to add items to cart', 'warning');
             return;
         }
 
@@ -98,17 +100,18 @@ export function CartProvider({ children }: CartProviderProps) {
                 const data = await res.json();
                 setItems(data.items || []);
                 setTotal(data.total || 0);
+                showToast('Item added to cart!', 'success');
             } else {
                 const error = await res.json();
-                alert(error.error || 'Failed to add to cart');
+                showToast(error.error || 'Failed to add to cart', 'error');
             }
         } catch (error) {
             console.error('Failed to add to cart:', error);
-            alert('Failed to add to cart');
+            showToast('Failed to add to cart', 'error');
         } finally {
             setLoading(false);
         }
-    }, [status]);
+    }, [status, showToast]);
 
     const updateQuantity = useCallback(async (productId: string, quantity: number) => {
         if (status !== 'authenticated') return;

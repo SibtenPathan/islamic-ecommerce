@@ -1,12 +1,48 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import ProductCard from '@/components/products/ProductCard';
-import { products, categories, events } from '@/data/products';
+import { categories, events } from '@/data/products';
 import './home.css';
 
+interface Product {
+  _id: string;
+  name: string;
+  category: string;
+  price: number;
+  originalPrice?: number;
+  image: string;
+  colors?: string[];
+  sizes?: string[];
+  isNewArrival?: boolean;
+  isBestSeller?: boolean;
+  isTrending?: boolean;
+}
+
 export default function HomePage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('/api/products');
+        const data = await response.json();
+        if (data.products) {
+          setProducts(data.products);
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   const bestSellers = products.filter(p => p.isBestSeller).slice(0, 4);
   const trendingProducts = products.slice(0, 8);
 
@@ -20,8 +56,8 @@ export default function HomePage() {
             <h1 className="hero-title">Discount 30%</h1>
             <p className="hero-subtitle">Women Dress Maroon</p>
             <div className="hero-price">
-              <span className="sale-price">Rp540.00</span>
-              <span className="original-price">Rp700.00</span>
+              <span className="sale-price">₹540.00</span>
+              <span className="original-price">₹700.00</span>
             </div>
             <Link href="/products" className="hero-btn">
               Shop Now
@@ -88,7 +124,7 @@ export default function HomePage() {
 
           <div className="products-grid">
             {bestSellers.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product._id} product={product} />
             ))}
           </div>
         </div>
@@ -107,7 +143,7 @@ export default function HomePage() {
 
           <div className="products-grid">
             {trendingProducts.slice(0, 4).map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product._id} product={product} />
             ))}
           </div>
 

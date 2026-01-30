@@ -4,10 +4,12 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useToast } from '@/contexts/ToastContext';
 import './auth.css';
 
 export default function LoginPage() {
     const router = useRouter();
+    const { showToast } = useToast();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -27,12 +29,15 @@ export default function LoginPage() {
 
             if (result?.error) {
                 setError(result.error);
+                showToast(result.error, 'error');
             } else {
+                showToast('Welcome back!', 'success');
                 router.push('/');
                 router.refresh();
             }
         } catch {
             setError('Something went wrong');
+            showToast('Something went wrong. Please try again.', 'error');
         } finally {
             setLoading(false);
         }

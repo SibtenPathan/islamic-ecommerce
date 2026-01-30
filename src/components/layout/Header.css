@@ -285,6 +285,17 @@
     margin-top: 8px;
 }
 
+/* Bridge the gap between trigger and dropdown to prevent hover loss */
+.user-dropdown-menu::before {
+    content: '';
+    position: absolute;
+    top: -12px;
+    left: 0;
+    right: 0;
+    height: 12px;
+    background: transparent;
+}
+
 .user-info {
     padding: 0.75rem 1rem;
     border-bottom: 1px solid var(--border-light);
