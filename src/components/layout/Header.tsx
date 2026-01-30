@@ -2,13 +2,18 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { useSession, signOut } from 'next-auth/react';
 import { collectionItems } from '@/data/products';
+import { useCart } from '@/contexts/CartContext';
 import './Header.css';
 
 export default function Header() {
+  const { data: session, status } = useSession();
+  const { cartCount } = useCart();
   const [isCollectionsOpen, setIsCollectionsOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   return (
     <header className="header">
@@ -92,24 +97,56 @@ export default function Header() {
               <path d="M21 21l-4.35-4.35" />
             </svg>
           </button>
-          <button className="action-btn" aria-label="Wishlist">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-            </svg>
-          </button>
-          <button className="action-btn" aria-label="Cart">
+
+          {/* Cart Button */}
+          <Link href="/cart" className="action-btn cart-btn" aria-label="Cart">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
               <line x1="3" y1="6" x2="21" y2="6" />
               <path d="M16 10a4 4 0 0 1-8 0" />
             </svg>
-          </button>
-          <button className="action-btn" aria-label="Account">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-          </button>
+            {cartCount > 0 && (
+              <span className="cart-badge">{cartCount > 99 ? '99+' : cartCount}</span>
+            )}
+          </Link>
+
+          {/* User Menu */}
+          <div
+            className="user-menu-wrapper"
+            onMouseEnter={() => setIsUserMenuOpen(true)}
+            onMouseLeave={() => setIsUserMenuOpen(false)}
+          >
+            <button className="action-btn" aria-label="Account">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </button>
+            {isUserMenuOpen && (
+              <div className="user-dropdown-menu">
+                {status === 'authenticated' && session?.user ? (
+                  <>
+                    <div className="user-info">
+                      <span className="user-name">{session.user.name}</span>
+                      <span className="user-email">{session.user.email}</span>
+                    </div>
+                    <Link href="/orders" className="user-dropdown-item">My Orders</Link>
+                    <button
+                      onClick={() => signOut({ callbackUrl: '/' })}
+                      className="user-dropdown-item logout-btn"
+                    >
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/login" className="user-dropdown-item">Login</Link>
+                    <Link href="/register" className="user-dropdown-item">Register</Link>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
 
           {/* Mobile Menu Toggle */}
           <button
@@ -158,6 +195,21 @@ export default function Header() {
             <Link href="/blog" className="mobile-nav-link">Blog</Link>
             <Link href="/contact" className="mobile-nav-link">Contact</Link>
             <Link href="/about" className="mobile-nav-link">About us</Link>
+            <hr className="mobile-divider" />
+            <Link href="/cart" className="mobile-nav-link">Cart ({cartCount})</Link>
+            {status === 'authenticated' ? (
+              <>
+                <Link href="/orders" className="mobile-nav-link">My Orders</Link>
+                <button onClick={() => signOut({ callbackUrl: '/' })} className="mobile-nav-link logout">
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/login" className="mobile-nav-link">Login</Link>
+                <Link href="/register" className="mobile-nav-link">Register</Link>
+              </>
+            )}
           </nav>
         </div>
       )}

@@ -29,7 +29,7 @@ export default function HomePage() {
           </div>
           <div className="hero-image">
             <Image
-              src="/images/Home1/Image-1.png"
+              src="/images/Home1/fococlipping-20211228-164156 1-22.png"
               alt="Women Dress Collection"
               fill
               style={{ objectFit: 'cover', objectPosition: 'top' }}

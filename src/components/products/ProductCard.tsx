@@ -2,16 +2,30 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useCart } from '@/contexts/CartContext';
 import type { Product } from '@/data/products';
 import './ProductCard.css';
 
 interface ProductCardProps {
-  product: Product;
+  product: Product & { _id?: string };
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const { addToCart } = useCart();
+
+  // Handle both MongoDB _id and legacy numeric id
+  const productId = product._id || String(product.id);
+  const productLink = product._id ? `/products/${product._id}` : `/products/${product.id}`;
+
+  const handleAddToCart = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    await addToCart(productId);
+  };
+
   return (
-    <Link href={`/products/${product.id}`} className="product-card">
+    <Link href={productLink} className="product-card">
       <div className="product-image">
         <Image
           src={product.image}
@@ -51,7 +65,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             ))}
           </div>
         )}
-        <button className="add-btn">Add</button>
+        <button className="add-btn" onClick={handleAddToCart}>Add</button>
       </div>
     </Link>
   );
