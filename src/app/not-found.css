@@ -1,0 +1,76 @@
+.not-found-page {
+    position: relative;
+    min-height: calc(100vh - 200px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.background-image {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.content {
+    color: white;
+    padding: 2rem;
+}
+
+.content h1 {
+    font-size: 8rem;
+    font-weight: 300;
+    margin: 0;
+    line-height: 1;
+    letter-spacing: -5px;
+    color: white;
+}
+
+.content h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 1rem 0;
+    color: white;
+}
+
+.content p {
+    font-size: 1rem;
+    line-height: 1.6;
+    opacity: 0.9;
+    margin: 0 0 2rem 0;
+}
+
+.view-product-btn {
+    display: inline-block;
+    background: var(--color-accent);
+    color: white;
+    padding: 1rem 2.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all var(--transition-normal);
+}
+
+.view-product-btn:hover {
+    background: var(--color-accent-dark);
+    transform: translateY(-2px);
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .content h1 {
+        font-size: 5rem;
+    }
+
+    .content h2 {
+        font-size: 1.25rem;
+    }
+}
