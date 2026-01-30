@@ -1,0 +1,275 @@
+.coupons-page {
+    min-height: 100vh;
+    background-color: #f5f5f7;
+    padding: 2rem;
+}
+
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    gap: 1rem;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #c4a77d;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.page-header h1 {
+    font-size: 1.75rem;
+    color: #2d2d2d;
+    margin: 0;
+}
+
+.add-btn {
+    padding: 0.75rem 1.5rem;
+    background: #c4a77d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.add-btn:hover {
+    background: #b39669;
+}
+
+.message {
+    padding: 0.875rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.message.success {
+    background: #d4edda;
+    color: #155724;
+}
+
+.message.error {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Form */
+.coupon-form {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.coupon-form h2 {
+    font-size: 1.25rem;
+    color: #2d2d2d;
+    margin: 0 0 1.5rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    margin-bottom: 0.5rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #2d2d2d;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #c4a77d;
+}
+
+.form-group.checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-group.checkbox input {
+    width: auto;
+}
+
+.form-group.checkbox label {
+    margin: 0;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.cancel-btn {
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    color: #666;
+    cursor: pointer;
+}
+
+.cancel-btn:hover {
+    border-color: #999;
+}
+
+.submit-btn {
+    padding: 0.75rem 1.5rem;
+    background: #c4a77d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background: #b39669;
+}
+
+/* Table */
+.coupons-table {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.coupons-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.coupons-table th,
+.coupons-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.coupons-table th {
+    background: #f9f9f9;
+    font-weight: 600;
+    color: #666;
+    font-size: 0.875rem;
+}
+
+.coupon-code {
+    font-family: monospace;
+    font-weight: 600;
+    color: #c4a77d;
+    display: block;
+}
+
+.coupon-desc {
+    font-size: 0.75rem;
+    color: #666;
+    display: block;
+    margin-top: 0.25rem;
+}
+
+.status-toggle {
+    padding: 0.375rem 0.75rem;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.status-toggle.active {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-toggle.inactive {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.actions button {
+    padding: 0.375rem 0.75rem;
+    background: #f5f5f5;
+    border: none;
+    border-radius: 6px;
+    color: #666;
+    cursor: pointer;
+    font-size: 0.8125rem;
+}
+
+.actions button:hover {
+    background: #eee;
+}
+
+.actions button.delete:hover {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.no-data {
+    text-align: center;
+    color: #999;
+    padding: 2rem !important;
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .coupons-table {
+        overflow-x: auto;
+    }
+
+    .coupons-table table {
+        min-width: 700px;
+    }
+}

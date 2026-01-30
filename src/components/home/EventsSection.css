@@ -1,0 +1,55 @@
+/* Events Section Styles */
+
+.events-loading {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.loading-card {
+    width: 200px;
+    height: 280px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.1) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 12px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.event-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.event-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    background: rgba(196, 167, 125, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .events-loading {
+        flex-wrap: wrap;
+    }
+
+    .loading-card {
+        width: 150px;
+        height: 200px;
+    }
+}

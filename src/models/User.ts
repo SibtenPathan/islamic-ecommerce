@@ -1,10 +1,16 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
 export interface IAddress {
-    street?: string;
-    city?: string;
-    postalCode?: string;
-    country?: string;
+    _id?: mongoose.Types.ObjectId;
+    label: string; // e.g., 'Home', 'Work'
+    fullName: string;
+    phone: string;
+    street: string;
+    city: string;
+    state?: string;
+    postalCode: string;
+    country: string;
+    isDefault?: boolean;
 }
 
 export type UserRole = 'user' | 'admin';
@@ -15,7 +21,9 @@ export interface IUser extends Document {
     email: string;
     password: string;
     phone?: string;
-    address?: IAddress;
+    address?: IAddress; // Legacy single address
+    addresses: IAddress[]; // Multiple addresses
+    newsletter: boolean;
     role: UserRole;
     createdAt: Date;
     updatedAt: Date;
@@ -23,12 +31,16 @@ export interface IUser extends Document {
 
 const AddressSchema = new Schema<IAddress>(
     {
-        street: { type: String, trim: true },
-        city: { type: String, trim: true },
-        postalCode: { type: String, trim: true },
-        country: { type: String, trim: true },
-    },
-    { _id: false }
+        label: { type: String, required: true, trim: true },
+        fullName: { type: String, required: true, trim: true },
+        phone: { type: String, required: true, trim: true },
+        street: { type: String, required: true, trim: true },
+        city: { type: String, required: true, trim: true },
+        state: { type: String, trim: true },
+        postalCode: { type: String, required: true, trim: true },
+        country: { type: String, required: true, trim: true },
+        isDefault: { type: Boolean, default: false },
+    }
 );
 
 const UserSchema = new Schema<IUser>(
@@ -58,6 +70,11 @@ const UserSchema = new Schema<IUser>(
             trim: true,
         },
         address: AddressSchema,
+        addresses: [AddressSchema],
+        newsletter: {
+            type: Boolean,
+            default: false,
+        },
         role: {
             type: String,
             enum: ['user', 'admin'],

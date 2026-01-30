@@ -7,6 +7,7 @@ import Footer from "@/components/layout/Footer";
 import AuthProvider from "@/contexts/AuthProvider";
 import { CartProvider } from "@/contexts/CartContext";
 import { ToastProvider } from "@/contexts/ToastContext";
+import { WishlistProvider } from "@/contexts/WishlistContext";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -35,9 +36,11 @@ export default function RootLayout({
         <AuthProvider>
           <ToastProvider>
             <CartProvider>
-              <Header />
-              <main>{children}</main>
-              <Footer />
+              <WishlistProvider>
+                <Header />
+                <main>{children}</main>
+                <Footer />
+              </WishlistProvider>
             </CartProvider>
           </ToastProvider>
         </AuthProvider>

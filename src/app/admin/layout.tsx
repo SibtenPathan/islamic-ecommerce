@@ -59,10 +59,14 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
     const navItems = [
         { href: '/admin', icon: '📊', label: 'Dashboard', exact: true },
+        { href: '/admin/analytics', icon: '📈', label: 'Analytics' },
         { href: '/admin/products', icon: '📦', label: 'Products' },
         { href: '/admin/categories', icon: '🏷️', label: 'Categories' },
         { href: '/admin/orders', icon: '🛒', label: 'Orders' },
         { href: '/admin/users', icon: '👥', label: 'Users' },
+        { href: '/admin/coupons', icon: '🎟️', label: 'Coupons' },
+        { href: '/admin/banners', icon: '🖼️', label: 'Banners' },
+        { href: '/admin/events', icon: '📅', label: 'Events' },
     ];
 
     const isActive = (href: string, exact?: boolean) => {

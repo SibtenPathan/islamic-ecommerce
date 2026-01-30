@@ -4,7 +4,9 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import ProductCard from '@/components/products/ProductCard';
-import { categories, events } from '@/data/products';
+import HeroCarousel from '@/components/home/HeroCarousel';
+import EventsSection from '@/components/home/EventsSection';
+import { categories } from '@/data/products';
 import './home.css';
 
 interface Product {
@@ -48,32 +50,8 @@ export default function HomePage() {
 
   return (
     <div className="home-page">
-      {/* Hero Section */}
-      <section className="hero">
-        <div className="hero-container">
-          <div className="hero-content">
-            <span className="hero-badge">Limited Time Offer</span>
-            <h1 className="hero-title">Discount 30%</h1>
-            <p className="hero-subtitle">Women Dress Maroon</p>
-            <div className="hero-price">
-              <span className="sale-price">₹540.00</span>
-              <span className="original-price">₹700.00</span>
-            </div>
-            <Link href="/products" className="hero-btn">
-              Shop Now
-            </Link>
-          </div>
-          <div className="hero-image">
-            <Image
-              src="/images/Home1/fococlipping-20211228-164156 1-22.png"
-              alt="Women Dress Collection"
-              fill
-              style={{ objectFit: 'cover', objectPosition: 'top' }}
-              priority
-            />
-          </div>
-        </div>
-      </section>
+      {/* Hero Carousel - Dynamic from Admin */}
+      <HeroCarousel />
 
       {/* Categories Section */}
       <section className="section categories-section">
@@ -185,35 +163,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Upcoming Event Banner */}
-      <section className="event-banner">
-        <div className="event-container">
-          <div className="event-content">
-            <div className="islamic-divider-sm light">
-              <span className="islamic-pattern">❋</span>
-            </div>
-            <h2 className="event-title">Up coming event</h2>
-            <p className="event-subtitle">
-              Here are some of the events that are worth buying to discover.
-            </p>
-            <div className="event-cards">
-              {events.map((event) => (
-                <div key={event.id} className="event-card">
-                  <div className="event-card-image">
-                    <Image
-                      src={event.image}
-                      alt={event.title}
-                      fill
-                      style={{ objectFit: 'cover' }}
-                    />
-                  </div>
-                  <h4 className="event-card-title">{event.title}</h4>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Events Section - Dynamic from Admin */}
+      <EventsSection />
     </div>
   );
 }

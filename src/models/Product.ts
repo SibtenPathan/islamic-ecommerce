@@ -16,6 +16,8 @@ export interface IProduct extends Document {
     isNewArrival?: boolean;
     isBestSeller?: boolean;
     isTrending?: boolean;
+    averageRating: number;
+    reviewCount: number;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -69,6 +71,17 @@ const ProductSchema = new Schema<IProduct>(
             type: Boolean,
             default: false,
         },
+        averageRating: {
+            type: Number,
+            default: 0,
+            min: 0,
+            max: 5,
+        },
+        reviewCount: {
+            type: Number,
+            default: 0,
+            min: 0,
+        },
     },
     {
         timestamps: true,
@@ -80,6 +93,7 @@ ProductSchema.index({ category: 1 });
 ProductSchema.index({ price: 1 });
 ProductSchema.index({ isBestSeller: 1 });
 ProductSchema.index({ isTrending: 1 });
+ProductSchema.index({ name: 'text', description: 'text' }); // Text search index
 
 const Product: Model<IProduct> = mongoose.models.Product || mongoose.model<IProduct>('Product', ProductSchema);
 

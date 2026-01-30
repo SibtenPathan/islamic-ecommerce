@@ -1,0 +1,358 @@
+.profile-page {
+    min-height: 100vh;
+    background-color: #f9f6f2;
+    padding: 2rem 0;
+}
+
+.profile-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.profile-container h1 {
+    font-size: 2rem;
+    color: #2d2d2d;
+    margin-bottom: 2rem;
+}
+
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    gap: 1rem;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #c4a77d;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Layout */
+.profile-layout {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 2rem;
+}
+
+/* Navigation */
+.profile-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: white;
+    padding: 1rem;
+    border-radius: 12px;
+    height: fit-content;
+}
+
+.profile-nav button,
+.profile-nav a {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    background: none;
+    border: none;
+    border-radius: 8px;
+    color: #666;
+    font-size: 0.9375rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+}
+
+.profile-nav button:hover,
+.profile-nav a:hover {
+    background: #f5f5f5;
+    color: #2d2d2d;
+}
+
+.profile-nav button.active {
+    background: #c4a77d;
+    color: white;
+}
+
+/* Content */
+.profile-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+}
+
+.message {
+    padding: 0.875rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.message.success {
+    background: #d4edda;
+    color: #155724;
+}
+
+.message.error {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Forms */
+.profile-form h2,
+.addresses-section h2 {
+    font-size: 1.25rem;
+    color: #2d2d2d;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #2d2d2d;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #c4a77d;
+}
+
+.form-group input:disabled {
+    background: #f5f5f5;
+    color: #999;
+}
+
+.form-group.checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-group.checkbox input {
+    width: auto;
+}
+
+.form-group.checkbox label {
+    margin: 0;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.submit-btn {
+    padding: 0.875rem 2rem;
+    background: #c4a77d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.submit-btn:hover {
+    background: #b39669;
+}
+
+/* Addresses */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.add-btn {
+    padding: 0.625rem 1.25rem;
+    background: #c4a77d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.add-btn:hover {
+    background: #b39669;
+}
+
+.address-form {
+    background: #f9f6f2;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+}
+
+.address-form h3 {
+    font-size: 1.125rem;
+    color: #2d2d2d;
+    margin-bottom: 1.25rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.cancel-btn {
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.cancel-btn:hover {
+    border-color: #999;
+    color: #333;
+}
+
+.addresses-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.address-card {
+    border: 1px solid #eee;
+    padding: 1.25rem;
+    border-radius: 12px;
+    transition: box-shadow 0.3s;
+}
+
+.address-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.address-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.address-label {
+    font-weight: 600;
+    color: #2d2d2d;
+}
+
+.default-badge {
+    font-size: 0.75rem;
+    background: #d4edda;
+    color: #155724;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+.address-name {
+    font-weight: 500;
+    color: #2d2d2d;
+    margin-bottom: 0.25rem;
+}
+
+.address-text {
+    color: #666;
+    font-size: 0.875rem;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.address-phone {
+    color: #666;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+.address-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.address-actions button {
+    padding: 0.5rem 1rem;
+    background: #f5f5f5;
+    border: none;
+    border-radius: 6px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.address-actions button:hover {
+    background: #eee;
+    color: #2d2d2d;
+}
+
+.address-actions button.delete:hover {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.no-addresses {
+    text-align: center;
+    color: #666;
+    padding: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .profile-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-nav {
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 0.5rem;
+    }
+
+    .profile-nav button,
+    .profile-nav a {
+        white-space: nowrap;
+        padding: 0.625rem 1rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+}

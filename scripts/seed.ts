@@ -3,6 +3,8 @@ import bcrypt from 'bcryptjs';
 import Product from '../src/models/Product.js';
 import User from '../src/models/User.js';
 import Category from '../src/models/Category.js';
+import Banner from '../src/models/Banner.js';
+import Event from '../src/models/Event.js';
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/islamic-ecommerce';
 
@@ -130,6 +132,62 @@ const categories = [
     { name: 'Outerwear', slug: 'outerwear', image: '/images/ProductCatlog/image 80-9.png', description: 'Outer garments', isActive: true },
 ];
 
+// Banner data (for hero carousel)
+const banners = [
+    {
+        title: 'Discount 30%',
+        subtitle: 'Women Dress Maroon',
+        image: '/images/Home1/fococlipping-20211228-164156 1-22.png',
+        link: '/products',
+        buttonText: 'Shop Now',
+        order: 1,
+        isActive: true,
+    },
+    {
+        title: 'New Arrivals',
+        subtitle: 'Explore Latest Collection',
+        image: '/images/Home1/image 94-21.png',
+        link: '/products?filter=new',
+        buttonText: 'Discover',
+        order: 2,
+        isActive: true,
+    },
+    {
+        title: 'Best Sellers',
+        subtitle: 'Most Popular Items',
+        image: '/images/Home1/image 95-17.png',
+        link: '/products?filter=bestseller',
+        buttonText: 'Shop Best',
+        order: 3,
+        isActive: true,
+    },
+];
+
+// Events data
+const events = [
+    {
+        title: 'Eid Collection',
+        description: 'Exclusive Eid collection with special discounts',
+        image: '/images/Home1/image 84.png',
+        date: new Date('2026-04-01'),
+        isActive: true,
+    },
+    {
+        title: 'Ramadan Special',
+        description: 'Special Ramadan offers on selected items',
+        image: '/images/Home1/image 85.png',
+        date: new Date('2026-03-01'),
+        isActive: true,
+    },
+    {
+        title: 'Summer Collection',
+        description: 'Fresh summer styles just arrived',
+        image: '/images/Home1/image 86.png',
+        date: new Date('2026-05-01'),
+        isActive: true,
+    },
+];
+
 // Admin user data
 const adminUser = {
     name: 'Admin',
@@ -148,6 +206,8 @@ async function seed() {
         console.log('🗑️  Clearing existing data...');
         await Product.deleteMany({});
         await Category.deleteMany({});
+        await Banner.deleteMany({});
+        await Event.deleteMany({});
 
         // Create admin user if not exists
         console.log('👤 Creating admin user...');
@@ -179,6 +239,16 @@ async function seed() {
         const insertedProducts = await Product.insertMany(products);
         console.log(`✅ Inserted ${insertedProducts.length} products`);
 
+        // Insert banners
+        console.log('🖼️  Inserting banners...');
+        const insertedBanners = await Banner.insertMany(banners);
+        console.log(`✅ Inserted ${insertedBanners.length} banners`);
+
+        // Insert events
+        console.log('📅 Inserting events...');
+        const insertedEvents = await Event.insertMany(events);
+        console.log(`✅ Inserted ${insertedEvents.length} events`);
+
         // Log product IDs for reference
         console.log('\n📋 Product IDs:');
         insertedProducts.forEach((p, i) => {
@@ -186,6 +256,11 @@ async function seed() {
         });
 
         console.log('\n🎉 Database seeding completed successfully!');
+        console.log('\n📌 Sample Data Added:');
+        console.log(`   - ${insertedProducts.length} Products`);
+        console.log(`   - ${insertedCategories.length} Categories`);
+        console.log(`   - ${insertedBanners.length} Banners (Hero Carousel)`);
+        console.log(`   - ${insertedEvents.length} Events`);
     } catch (error) {
         console.error('❌ Seeding failed:', error);
         process.exit(1);
